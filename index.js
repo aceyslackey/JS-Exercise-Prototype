@@ -19,7 +19,6 @@ Airplane.prototype.land = function () {
   this.isFlying = false;
 };
 
-
 /*
 // 👇 COMPLETE YOUR WORK BELOW 👇
 // 👇 COMPLETE YOUR WORK BELOW 👇
@@ -38,16 +37,31 @@ Airplane.prototype.land = function () {
     - Give instances of Person a method `.toString()`:
         + It should return a string with `name` and `age`. Example: "Mary, 50"
 */
-
-function Person() {
-  
+function Person(name, age) {
+  this.name = name;
+  this.age = age;
+  this.stomach = [];
 }
+Person.prototype.eat = function (edible) {
+  if (this.stomach.length < 10) {
+    this.stomach.push(edible);
+  }
+};
+Person.prototype.poop = function () {
+  this.stomach = [];
+};
 
+Person.prototype.toString = function () {
+  return `${this.name}, ${this.age}`;
+};
 
+const personOne = new Person("Matt", 39);
+const personTwo = new Person("Krista", 33);
+const personThree = new Person("Pablo", 35);
 
-
-
-
+personThree.eat("tacos");
+personThree.eat("tacos");
+personThree.eat("tacos");
 
 /*
   TASK 2
@@ -62,12 +76,39 @@ function Person() {
     - STRETCH: A car which runs out of `fuel` while driving can't drive any more distance:
         + The `drive` method should return a string "I ran out of fuel at x miles!" x being `odometer`.
 */
-
-function Car() {
-  
+function Car(model, milesPerGallon) {
+  this.tank = 0;
+  this.odometer = 0;
+  this.model = model;
+  this.milesPerGallon = milesPerGallon;
 }
+Car.prototype.fill = function (gallons) {
+  this.tank = this.tank + gallons;
+};
+Car.prototype.drive = function (distance) {
+  if (this.tank - distance / this.milesPerGallon > 0) {
+    this.tank = this.tank - distance / this.milesPerGallon;
+    this.odometer = this.odometer + distance;
+  } else {
+    this.odometer = this.odometer + this.tank * this.milesPerGallon;
+    this.tank = 0;
+    return `I ran out of fuel at ${this.odometer} miles!`;
+  }
+};
 
+const cav = new Car("Cavalier", 35);
 
+// console.log(cav);
+
+// cav.fill(20);
+
+// console.log(cav);
+
+// cav.drive(400);
+// console.log(cav);
+
+// cav.drive(400);
+// console.log(cav);
 /*
   TASK 3
     - Write a Baby constructor subclassing Person.
@@ -75,10 +116,22 @@ function Car() {
     - Besides the methods on Person.prototype, babies have the ability to `.play()`:
         + Should return a string "Playing with x", x being the favorite toy.
 */
-function Baby() {
- 
+function Baby(name, age, babyAttrs) {
+  Person.call(this, babyAttrs);
+  this.name = name;
+  this.age = age;
+  this.favoriteToy = babyAttrs;
 }
+Baby.prototype = Object.create(Person.prototype);
 
+Baby.prototype.play = function () {
+  return `${this.name} is playing with ${this.favoriteToy}`;
+};
+
+const personFour = new Baby("Peter", 1, "Rattler");
+
+console.log(personFour);
+personFour.play();
 
 /* 
   TASK 4
@@ -89,18 +142,17 @@ function Baby() {
   4. 
 */
 
-
 ///////// END OF CHALLENGE /////////
 
 /* 🛑🛑🛑🛑🛑🛑🛑🛑🛑🛑 Please do not modify anything below this line 🛑🛑🛑🛑🛑🛑🛑🛑🛑🛑 */
-function foo(){
-  console.log('its working!');
-  return 'bar';
+function foo() {
+  console.log("its working!");
+  return "bar";
 }
 foo();
 module.exports = {
   foo,
-  Person, 
+  Person,
   Car,
-  Baby
-}
+  Baby,
+};
